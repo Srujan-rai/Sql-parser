@@ -3,7 +3,6 @@ import sqlparse
 import pandas as pd
 import re
 import argparse
-from graphviz import Digraph
 
 MAX_VALUES = {
     "subqueries": 10,
@@ -112,7 +111,7 @@ def parse_arguments():
                         help="Path(s) to the source SQL file(s). Accepts multiple files.")
     parser.add_argument('-d', '--destination', default='.',
                         help="Destination directory for outputs.")
-    parser.add_argument('-type','--type',help="Specify the type used (e.g., mysql)")
+    parser.add_argument('-type','--type',help="Specify the type used (e.g., mysql,postgres,oracle)",required=True)
     return parser.parse_args()
 
 def main():
@@ -206,8 +205,8 @@ def main():
             **metrics,
             "File Name": os.path.basename(input_file),
             "Complexity Score": complexity_score,
-            "Problematic SQL Keywords Count (MySQL)": problematic_keywords_count_mysql,
-            "Problematic SQL Keywords (MySQL)": keyword_details_mysql
+            "Problematic MYSQL Keywords Count (MySQL)": problematic_keywords_count_mysql,
+            "Problematic MYSQL Keywords (MySQL)": keyword_details_mysql
         }
 
         if type and type.lower() == 'oracle':
@@ -217,8 +216,8 @@ def main():
             **metrics,
             "File Name": os.path.basename(input_file),
             "Complexity Score": complexity_score,
-            "Problematic SQL Keywords Count (Oracle)": problematic_keywords_count_oracle,
-            "Problematic SQL Keywords (Oracle)": keyword_details_oracle
+            "Problematic oracle Keywords Count (Oracle)": problematic_keywords_count_oracle,
+            "Problematic oracle Keywords (Oracle)": keyword_details_oracle
             
         }
         
@@ -229,8 +228,8 @@ def main():
             **metrics,
             "File Name": os.path.basename(input_file),
             "Complexity Score": complexity_score,
-            "Problematic SQL Keywords Count (postgres)": problematic_keywords_count_postgres,
-            "Problematic SQL Keywords (postgres)": keyword_details_postgres,
+            "Problematic postgres Keywords Count (postgres)": problematic_keywords_count_postgres,
+            "Problematic postgres Keywords (postgres)": keyword_details_postgres,
         }          
 
         
