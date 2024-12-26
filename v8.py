@@ -152,6 +152,8 @@ def parse_arguments():
                         help="Path(s) to the source SQL file(s). Accepts multiple files.")
     parser.add_argument('-d', '--destination', default='.',
                         help="Destination directory for outputs.")
+    parser.add_argument('-lan','--language',help="mention the language used")
+    
     return parser.parse_args()
 
 
@@ -159,6 +161,8 @@ def main():
     args = parse_arguments()
     input_files = args.source
     destination_path = args.destination
+    language=args.language
+    print(language)
 
     if not os.path.exists(destination_path):
         os.makedirs(destination_path)
@@ -191,6 +195,8 @@ def main():
             "RIGHT JOIN": join_counts.get("RIGHT JOIN", 0),
             "FULL JOIN": join_counts.get("FULL JOIN", 0),
             "CROSS JOIN": join_counts.get("CROSS JOIN", 0),
+            "PIVOTS":pivot_count,
+            "UNPIVOT COUNT":unpivot_count,
             "SUBQUERY COUNT": subquery_count,
             "CTEs": cte_count,
             "Total Lines": total_lines
@@ -206,7 +212,7 @@ def main():
         print(f"Analysis complete for '{input_file}' with Complexity Score: {complexity_score}")
 
         print(f"Visualizing formatted SQL for '{input_file}'...")
-        visualize_sql(formatted_sql, destination_path, base_filename)
+        #visualize_sql(formatted_sql, destination_path, base_filename)
 
     generate_excel_summary(results, os.path.join(destination_path, "sql_summary.xlsx"))
     print("Task complete! All files analyzed and visualized.")
