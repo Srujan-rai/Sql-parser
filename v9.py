@@ -190,6 +190,7 @@ def main():
             "CTEs": cte_count,
             "Total Lines": total_lines
         }
+        complexity_score = calculate_complexity_score(metrics)
 
         problematic_keywords_count_mysql = 0
         keyword_details_mysql = {}
@@ -201,27 +202,38 @@ def main():
         if type and type.lower() == 'mysql':
             problematic_keywords_count_mysql, keyword_details_mysql = count_specific_keywords(formatted_sql, mysql_keywords)
             print(f"MySQL-specific keyword occurrences in '{input_file}': {problematic_keywords_count_mysql}")
-
-        if type and type.lower() == 'oracle':
-            problematic_keywords_count_oracle, keyword_details_oracle = count_specific_keywords(formatted_sql, oracle_keywords)
-            print(f"Oracle-specific keyword occurrences in '{input_file}': {problematic_keywords_count_oracle}")
-        
-        if type and type.lower() == 'postgresql':
-            problematic_keywords_count_postgres, keyword_details_postgres = count_specific_keywords(formatted_sql, postgres_keywords)
-            print(f"postgres-specific keyword occurrences in '{input_file}': {problematic_keywords_count_postgres}")            
-
-        complexity_score = calculate_complexity_score(metrics)
-        result = {
+            result = {
             **metrics,
             "File Name": os.path.basename(input_file),
             "Complexity Score": complexity_score,
             "Problematic SQL Keywords Count (MySQL)": problematic_keywords_count_mysql,
-            "Problematic SQL Keywords (MySQL)": keyword_details_mysql,
+            "Problematic SQL Keywords (MySQL)": keyword_details_mysql
+        }
+
+        if type and type.lower() == 'oracle':
+            problematic_keywords_count_oracle, keyword_details_oracle = count_specific_keywords(formatted_sql, oracle_keywords)
+            print(f"Oracle-specific keyword occurrences in '{input_file}': {problematic_keywords_count_oracle}")
+            result = {
+            **metrics,
+            "File Name": os.path.basename(input_file),
+            "Complexity Score": complexity_score,
             "Problematic SQL Keywords Count (Oracle)": problematic_keywords_count_oracle,
-            "Problematic SQL Keywords (Oracle)": keyword_details_oracle,
+            "Problematic SQL Keywords (Oracle)": keyword_details_oracle
+            
+        }
+        
+        if type and type.lower() == 'postgresql':
+            problematic_keywords_count_postgres, keyword_details_postgres = count_specific_keywords(formatted_sql, postgres_keywords)
+            print(f"postgres-specific keyword occurrences in '{input_file}': {problematic_keywords_count_postgres}")
+            result = {
+            **metrics,
+            "File Name": os.path.basename(input_file),
+            "Complexity Score": complexity_score,
             "Problematic SQL Keywords Count (postgres)": problematic_keywords_count_postgres,
             "Problematic SQL Keywords (postgres)": keyword_details_postgres,
-        }
+        }          
+
+        
         results.append(result)
         print(f"Analysis complete for '{input_file}' with Complexity Score: {complexity_score}")
 
