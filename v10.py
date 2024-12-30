@@ -79,7 +79,7 @@ def count_specific_keywords(formatted_sql, keywords):
     total_count = sum(keyword_counts.values())
     return total_count, keyword_counts
 
-def filter_problematic_keywords(keyword_details):
+def filter_unsupported_keywords(keyword_details):
     """Filter keywords that have a count greater than 0."""
     return {keyword: count for keyword, count in keyword_details.items() if count > 0}
 
@@ -126,37 +126,39 @@ def main():
     if not os.path.exists(destination_path):
         os.makedirs(destination_path)
 
-    mysql_keywords = [
-        "AUTO_INCREMENT", "ENUM", "SET","INT","TINYINT", "MEDIUMINT", "SMALLINT", "BIGINT","YEAR","CHAR","VARCHAR","TEXT","TINYTEXT","MEDIUMTEXT","LONGTEXT","BLOB","MEDIUM_BLOB","LONG_BLOB","TINY_BLOB","BINARY","VARBINARY","SET","BIT",
-        "TEXT", "BLOB", "UNSIGNED", "ZEROFILL", "IF", "NOW", "DUAL", 
-        "LOCK TABLES", "UNLOCK TABLES", "INSERT IGNORE", "REPLACE INTO", 
-        "USING", "LIMIT", "REGEXP", "UUID", "FOUND_ROWS", "SHOW", "DESCRIBE", 
-        "DATABASE", "SCHEMA", "INDEX", "KEY", "PRIMARY", "UNIQUE", 
-        "TRUNCATE", "ENGINE", "CHECKSUM", "EXPLAIN", "OPTIMIZE TABLE", 
-        "FLUSH", "ANALYZE TABLE", "RESET QUERY CACHE", "SAVEPOINT", 
-        "ROLLBACK TO SAVEPOINT", "RELEASE SAVEPOINT", "MASTER", "SLAVE", 
-        "PARTITION", "SPATIAL", "FULLTEXT", "MATCH", "COLLATE", "CHARSET", 
-        "CONNECTION", "DELAYED", "HANDLER", "IGNORE", "ANALYZE", 
-        "LOAD DATA", "DUMPFILE", "SQL_CALC_FOUND_ROWS", "SQL_SMALL_RESULT", 
-        "SQL_BIG_RESULT", "SQL_BUFFER_RESULT", "FORCE", "STRAIGHT_JOIN", 
-        "LOCK", "USAGE", "DISTRIBUTED", "VIRTUAL", "STORAGE", "ROW_FORMAT", 
-        "AUTOEXTEND_SIZE", "MIN_ROWS", "MAX_ROWS", "AVG_ROW_LENGTH", 
-        "PAGE_CHECKSUM", "TABLESPACE", "CONSTRAINT", "RESTRICT", "CASCADE", 
-        "REFERENCES", "FOREIGN", "CHECK" 
-    ]
+    mysql_keywords =  [
+    "AUTO_INCREMENT", "ENUM", "SET", "TINYINT", "MEDIUMINT", "SMALLINT", "BIGINT", 
+    "YEAR", "TEXT", "TINYTEXT", "MEDIUMTEXT", "LONGTEXT", "BLOB", "MEDIUM_BLOB", 
+    "LONG_BLOB", "TINY_BLOB", "VARBINARY", "UNSIGNED", "ZEROFILL", "IF", "NOW", 
+    "DUAL", "LOCK TABLES", "UNLOCK TABLES", "INSERT IGNORE", "REPLACE INTO", 
+    "SQL_CALC_FOUND_ROWS", "SHOW", "DESCRIBE", "DATABASE", "SCHEMA", "INDEX", 
+    "KEY", "PRIMARY", "TRUNCATE", "ENGINE", "CHECKSUM", "OPTIMIZE TABLE", 
+    "FLUSH", "ANALYZE TABLE", "RESET QUERY CACHE", "SAVEPOINT", "ROLLBACK TO SAVEPOINT", 
+    "RELEASE SAVEPOINT", "MASTER", "SLAVE", "PARTITION", "SPATIAL", "FULLTEXT", 
+    "CHARSET", "COLLATE", "CONNECTION", "DELAYED", "HANDLER", "LOAD DATA", 
+    "DUMPFILE", "FORCE", "STRAIGHT_JOIN", "AUTOEXTEND_SIZE", "MIN_ROWS", 
+    "MAX_ROWS", "AVG_ROW_LENGTH", "PAGE_CHECKSUM", "TABLESPACE", "ROW_FORMAT"
+]
 
     oracle_keywords = [
     "CONNECT BY", "START WITH", "LEVEL", "ROWNUM", "SYSDATE", "SYSTIMESTAMP", 
     "DUAL", "DECODE", "NVL", "TO_DATE", "TO_CHAR", "TO_NUMBER", "TO_TIMESTAMP", 
-    "MERGE", "PERCENT_RANK", "RATIO_TO_REPORT", "LISTAGG", "XMLTABLE", 
-    "USER", "ROWID", "EXPLAIN PLAN", "MODEL", "MINUS", "INTERSECT", 
-    "PRIOR", "REGEXP_LIKE", "REGEXP_INSTR", "REGEXP_SUBSTR", 
-    "Materialized Views", "PL/SQL Procedures", "Packages", "Sequences", 
-    "Autonomous Transactions", "Flashback Queries","VARCHAR2","NVARCHAR2","CHAR","NCHAR","CLOB","NCOLB","INTEGER","SHORTINTEGER","LONGINTEGER","NUMBER","FLOAT","BINARY_DOUBLE","BINARY_FLOAT","LONG","BLOB","BFILE","DATE","TIMESTAMP WITH LOCAL TIME ZONE","TIMESTAMP WITH LOCAL TIME ZONE","TIMESTAMP WITH LOCAL TIME ZONE","INTERVAL YEAR TO MONTH","INTERVAL DAY TO SECOND","RAW","LONG RAW","ROWID","DECODE","NANVL","FETCH NEXT>","NVL","NVL2","APPROX_COUNT_DISTINCT_AGG","APPROX_COUNT_DISTINCT_DETAIL","APPROX_PERCENTILE","APPROX_PERCENTILE_AGG","APPROX_PERCENTILE_DETAIL","APPROX_SUM","BIT_COMPLEMENT","CARDINALITY","COLLECT","FIRST","GROUP_ID","GROUPING","GROUPING_ID","LAST","LISTAGG","OLAP_CONDITION","OLAP_EXPRESSION","OLAP_EXPRESSION_BOOL","OLAP_EXPRESSION_DATE","OLAP_EXPRESSION_TEXT","OLAP_TABLE","POWERMULTISET","POWERMULTISET_BY_CARDINALITY","QUALIFY","REGR_AVGX","REGR_AVGY","REGR_COUNT","REGR_INTERCEPT","REGR_R2","REGR_SLOPE","REGR_SXX","REGR_SXY","REGR_SYY","ROLLUP","STDDEV_POP","WM_CONCAT","CUBE_TABLE","FEATURE_COMPARE","FEATURE_DETAILS","FEATURE_ID","FEATURE_SET","FEATURE_VALUE","HIER_CAPTION","HIER_CHILD_COUNT","HIER_COLUMN","HIER_DEPTH","HIER_DESCRIPTION","HIER_HAS_CHILDREN","HIER_LEVEL","HIER_MEMBER_NAME","HIER_ORDER","HIER_UNIQUE_MEMBER_NAME","LISTAGG","MATCH_NUMBER","MATCH_RECOGNIZE","MEDIAN","PRESENTNNV","PRESENTV","PREVIOUS","RATIO_TO_REPORT","WIDTH_BUCKET","ADD_MONTHS","DATE","LOCALTIMESTAMP","MONTHS_BETWEEN","NEW_TIME","NEXT_DAY","SYS_AT_TIME_ZONE","SYSDATE","SYSTIMESTAMP","TO_DATE","TO_TIMESTAMP","TO_TIMESTAMP_TZ","TZ_OFFSET"
+    "MERGE", "PERCENT_RANK", "RATIO_TO_REPORT", "XMLTABLE", "ROWID", 
+    "EXPLAIN PLAN", "MODEL", "MINUS", "INTERSECT", "PRIOR", "REGEXP_LIKE", 
+    "REGEXP_INSTR", "REGEXP_SUBSTR", "PL/SQL Procedures", "Packages", "Sequences", 
+    "Autonomous Transactions", "Flashback Queries", "VARCHAR2", "NVARCHAR2", 
+    "NCHAR", "NCOLB", "BINARY_DOUBLE", "BINARY_FLOAT", "LONG", "BFILE", 
+    "TIMESTAMP WITH LOCAL TIME ZONE", "INTERVAL YEAR TO MONTH", "INTERVAL DAY TO SECOND", 
+    "RAW", "LONG RAW", "FETCH NEXT>", "NVL2", "QUALIFY", "ROLLUP", "LISTAGG", 
+    "WM_CONCAT", "CUBE_TABLE", "ADD_MONTHS", "MONTHS_BETWEEN", "NEW_TIME", 
+    "SYS_AT_TIME_ZONE", "TO_TIMESTAMP_TZ", "TZ_OFFSET"
 ]
     postgres_keywords=[
-        "smallint","smallserial","integer","serial","bigint","bigserial","Decimal","money","real","double precision	","interval","character","text","bytea","bit","boolean","inet","path","pg_lsn","point","polygon","tsquery","tsvector","txid_snapshot","uuid","xml","box","box","circle","json","jsonb","line","lseg","macaddr","macaddr8",""
-    ]
+    "smallserial", "serial", "bigserial", "money", "bytea", "bit", 
+    "inet", "path", "pg_lsn", "point", "polygon", "tsquery", "tsvector", 
+    "txid_snapshot", "xml", "box", "circle", "line", "lseg", "macaddr", 
+    "macaddr8", "jsonb", "INTERVAL"
+]
     results = []
 
     for input_file in input_files:
@@ -200,15 +202,15 @@ def main():
         elif db_type == 'postgres':
             _, keyword_details = count_specific_keywords(formatted_sql, postgres_keywords)
 
-        filtered_keywords = filter_problematic_keywords(keyword_details)
-        total_problematic_keywords = sum(filtered_keywords.values())
+        filtered_keywords = filter_unsupported_keywords(keyword_details)
+        total_unsupported_keywords = sum(filtered_keywords.values())
 
         result = {
             **metrics,
             "File Name": os.path.basename(input_file),
             "Complexity Score": complexity_score,
-            "Problematic Keywords": filtered_keywords,
-            "Total Problematic Keywords": total_problematic_keywords
+            "unsupported Keywords": filtered_keywords,
+            "Total unsupported Keywords": total_unsupported_keywords
         }
         results.append(result)
 
