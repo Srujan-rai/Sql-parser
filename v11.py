@@ -81,7 +81,7 @@ def count_subqueries_and_depth(sql_text):
     Count subqueries and determine the maximum nesting depth of subqueries.
     """
     subquery_pattern = r"""
-        \(                             # Open parenthesis for subquery
+        \(                             
         \s*SELECT\s+                   # SELECT keyword
         .*?                            # Non-greedy match for the query
         \s+FROM\s+                     # FROM keyword
@@ -94,9 +94,7 @@ def count_subqueries_and_depth(sql_text):
     formatted_subquery_pattern = re.compile(subquery_pattern, re.IGNORECASE | re.VERBOSE | re.DOTALL)
 
     def find_subqueries(sql, depth=0):
-        """
-        Recursively find and count subqueries, tracking the maximum depth.
-        """
+
         matches = formatted_subquery_pattern.findall(sql)
         if not matches:
             return 0, depth
