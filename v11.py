@@ -145,7 +145,7 @@ def parse_arguments():
                         help="Path(s) to the source SQL file(s). Accepts multiple files.")
     parser.add_argument('-d', '--destination', default='.',
                         help="Destination directory for outputs.")
-    parser.add_argument('-type', '--type', help="Specify the type used (e.g., mysql, postgres, oracle)", required=True)
+    parser.add_argument('-type', '--type', help="Specify the type used (e.g., mysql, postgresql, oracle)", required=True)
     return parser.parse_args()
 
 def main():
@@ -188,7 +188,7 @@ def main():
     "smallserial", "serial", "bigserial", "money", "bytea", "bit", 
     "inet", "path", "pg_lsn", "point", "polygon", "tsquery", "tsvector", 
     "txid_snapshot", "xml", "box", "circle", "line", "lseg", "macaddr", 
-    "macaddr8", "jsonb", "INTERVAL"
+    "macaddr8", "jsonb", "INTERVAL","jsonb_build_object"
 ]
     results = []
 
@@ -228,7 +228,7 @@ def main():
             _, keyword_details = count_specific_keywords(formatted_sql, mysql_keywords)
         elif db_type == 'oracle':
             _, keyword_details = count_specific_keywords(formatted_sql, oracle_keywords)
-        elif db_type == 'postgres':
+        elif db_type == 'postgresql':
             _, keyword_details = count_specific_keywords(formatted_sql, postgres_keywords)
 
         filtered_keywords = filter_unsupported_keywords(keyword_details)
