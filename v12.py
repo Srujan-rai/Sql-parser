@@ -24,8 +24,7 @@ WEIGHTS = {
 
 def remove_comments(sql_text):
     """Removes SQL comments."""
-    sql_text_no_comments = re.sub(r'(--.*?$|/\*.*?\*/)', '', sql_text, flags=re.DOTALL | re.MULTILINE)
-    return sql_text_no_comments
+    return re.sub(r'(--.*?$|/\*.*?\*/)', '', sql_text, flags=re.DOTALL | re.MULTILINE)
 
 def format_sql_file(input_file, output_file):
     """Formats SQL file and removes comments."""
@@ -40,31 +39,34 @@ def format_sql_file(input_file, output_file):
     return formatted_sql
 
 def count_specific_keywords(formatted_sql, keywords):
-    keyword_counts = {}
-    for keyword in keywords:
-        keyword_counts[keyword] = len(re.findall(rf'\b{keyword}\b', formatted_sql, re.IGNORECASE))
-    total_count = sum(keyword_counts.values())
-    return total_count, keyword_counts
-
+    """Counts occurrences of specific keywords in the SQL."""
+    keyword_counts = {keyword: len(re.findall(rf'\b{keyword}\b', formatted_sql, re.IGNORECASE)) for keyword in keywords}
+    return sum(keyword_counts.values()), keyword_counts
 
 def count_joins_and_lines(formatted_sql):
     """Counts different JOIN types and total lines in the SQL."""
-    join_types = {
-        "INNER JOIN": 0,
-        "LEFT JOIN": 0,
-        "RIGHT JOIN": 0,
-        "FULL JOIN": 0,
-        "CROSS JOIN": 0,
-        "OUTER JOIN": 0,
+    patterns = {
+        "INNER JOIN": r'\bINNER JOIN\b',
+        "LEFT JOIN": r'\bLEFT JOIN\b',
+        "RIGHT JOIN": r'\bRIGHT JOIN\b',
+        "FULL JOIN": r'\bFULL JOIN\b',
+        "CROSS JOIN": r'\bCROSS JOIN\b',
+        "LEFT OUTER JOIN": r'\bLEFT\s+OUTER\s+JOIN\b',
+        "RIGHT OUTER JOIN": r'\bRIGHT\s+OUTER\s+JOIN\b',
+        "LEFT INNER JOIN": r'\bLEFT\s+INNER\s+JOIN\b',
+        "RIGHT INNER JOIN": r'\bRIGHT\s+INNER\s+JOIN\b',
     }
     
-    for join in join_types.keys():
-        join_types[join] = len(re.findall(rf'\b{join}\b', formatted_sql, re.IGNORECASE))
+    join_counts = {key: len(re.findall(pattern, formatted_sql, re.IGNORECASE)) for key, pattern in patterns.items()}
     
-    lines = [line for line in formatted_sql.splitlines() if line.strip()]
-    total_lines = len(lines)
+    join_counts["OUTER JOIN"] = join_counts.get("LEFT OUTER JOIN", 0) + join_counts.get("RIGHT OUTER JOIN", 0)
+    join_counts["INNER JOIN"] = join_counts.get("LEFT INNER JOIN", 0) + join_counts.get("RIGHT INNER JOIN", 0)
+
+    join_types = {k: join_counts[k] for k in ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN", "CROSS JOIN", "OUTER JOIN"]}
     
+    total_lines = sum(1 for line in formatted_sql.splitlines() if line.strip())
     return join_types, total_lines
+
 
 def filter_unsupported_keywords(keyword_details):
     """Filter keywords that have a count greater than 0."""
@@ -73,12 +75,11 @@ def filter_unsupported_keywords(keyword_details):
 
 def count_ctes(formatted_sql):
     """Counts the number of CTEs in the SQL."""
-    cte_pattern = r'\bWITH\b\s+\w+\s+AS\s*\('
-    return len(re.findall(cte_pattern, formatted_sql, re.IGNORECASE))
+    return len(re.findall(r'\bWITH\b\s+\w+\s+AS\s*\(', formatted_sql, re.IGNORECASE))
 
 def count_subqueries_and_depth(sql_text):
     """
-    Count subqueries and determine the maximum nesting depth of subqueries.
+    Counts subqueries and determines the maximum nesting depth of subqueries.
     """
     subquery_pattern = r"""
         \(                             
@@ -88,31 +89,25 @@ def count_subqueries_and_depth(sql_text):
         [^\(\);]+                      # Match table names or aliases
         (?:                            # Non-capturing group for optional clauses
             \s+(?:WHERE|GROUP\s+BY|HAVING|ORDER\s+BY)\s+.*? # WHERE, GROUP BY, etc.
-        )*                             # Zero or more optional clauses
-        \s*\)                          # Closing parenthesis
+        )*                             
+        \s*\)                          
     """
-    formatted_subquery_pattern = re.compile(subquery_pattern, re.IGNORECASE | re.VERBOSE | re.DOTALL)
+    formatted_pattern = re.compile(subquery_pattern, re.IGNORECASE | re.VERBOSE | re.DOTALL)
 
     def find_subqueries(sql, depth=0):
-
-        matches = formatted_subquery_pattern.findall(sql)
+        matches = formatted_pattern.findall(sql)
         if not matches:
             return 0, depth
 
         subquery_count = len(matches)
-        # Remove matched subqueries one by one
         for match in matches:
-            match_str = match if isinstance(match, str) else ''.join(match)
-            sql = sql.replace(match_str, "", 1)
-
+            sql = sql.replace(match, "", 1)
         nested_count, max_depth = find_subqueries(sql, depth + 1)
         return subquery_count + nested_count, max(depth, max_depth)
 
-    total_subqueries, max_depth = find_subqueries(sql_text)
-    return total_subqueries, max_depth
+    return find_subqueries(sql_text)
 
 def calculate_complexity_score(metrics):
-    """Calculates the complexity score based on the metrics."""
     subquery_score = (
         (metrics['SUBQUERY COUNT'] / MAX_VALUES['subqueries']) * 0.6 +
         (metrics['max_subquery_depth'] / MAX_VALUES['subquery_depth']) * 0.4
@@ -129,8 +124,7 @@ def calculate_complexity_score(metrics):
     join_score = (join_count / MAX_VALUES['joins']) * WEIGHTS['join_complexity']
     join_score = min(join_score, WEIGHTS['join_complexity'])
 
-    total_score = subquery_score + join_score
-    return round(total_score, 2)
+    return round(subquery_score + join_score, 2)
 
 def generate_excel_summary(results, excel_file):
     """Generates an Excel summary of the results."""
@@ -145,7 +139,7 @@ def parse_arguments():
                         help="Path(s) to the source SQL file(s). Accepts multiple files.")
     parser.add_argument('-d', '--destination', default='.',
                         help="Destination directory for outputs.")
-    parser.add_argument('-type', '--type', help="Specify the type used (e.g., mysql, postgres, oracle)", required=True)
+    parser.add_argument('-type', '--type', help="Specify the type used (e.g., mysql, postgresql, oracle)", required=True)
     return parser.parse_args()
 
 def main():
@@ -217,6 +211,7 @@ def main():
             "RIGHT JOIN": join_counts.get("RIGHT JOIN", 0),
             "FULL JOIN": join_counts.get("FULL JOIN", 0),
             "CROSS JOIN": join_counts.get("CROSS JOIN", 0),
+            "OUTER JOIN": join_counts.get("OUTER JOIN", 0),
             "SUBQUERY COUNT": subquery_count,
             "max_subquery_depth": max_subquery_depth,
             "CTEs": cte_count,
@@ -249,3 +244,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
