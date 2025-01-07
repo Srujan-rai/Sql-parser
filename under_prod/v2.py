@@ -19,23 +19,35 @@ def set_codemirror_content(driver, query):
     """
     driver.execute_script(script, query)
 
-# Locate and interact with the close button area
-def handle_close_area(driver):
+# Automate login process
+def login(driver, email, password):
     try:
-        # Wait for the close button to appear
-        close_button = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'button.ant-modal-close'))
+        # Wait for email input and insert value
+        email_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'email'))
         )
-        
-        # Click the close button
-        close_button.click()
-        print("Close button clicked successfully.")
-        time.sleep(1)  # Allow some time for the modal to close
+        email_input.clear()
+        email_input.send_keys(email)
+        print("Email entered.")
+
+        # Wait for password input and insert value
+        password_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'password'))
+        )
+        password_input.clear()
+        password_input.send_keys(password)
+        print("Password entered.")
+
+        # Locate and click the login button
+        login_button = driver.find_element(By.XPATH, '//button[contains(@class, "ant-btn-primary") and .//span[text()="login"]]')
+        login_button.click()
+        print("Login button clicked.")
+        time.sleep(3)  # Wait for login to complete
     except Exception as e:
-        print(f"Error locating or interacting with the close button: {e}")
+        print(f"Error during login process: {e}")
 
 # Automate the process for a single query
-def process_query(sql_file, download_dir):
+def process_query(sql_file, download_dir, email, password):
     # Set up Chrome WebDriver with download preferences
     chrome_options = webdriver.ChromeOptions()
     prefs = {
@@ -44,14 +56,20 @@ def process_query(sql_file, download_dir):
         "safebrowsing.enabled": True,
     }
     chrome_options.add_experimental_option("prefs", prefs)
+    # Ensure the browser is not headless
+    chrome_options.add_argument("--disable-headless")
+    chrome_options.add_argument("--start-maximized")  # Maximize browser window
+
     driver = webdriver.Chrome(options=chrome_options)
-    driver.maximize_window()
 
     try:
         # Open SQLFlow website
         driver.get("https://sqlflow.gudusoft.com/#/")
         print("Opened SQLFlow website.")
         time.sleep(5)
+
+        # Perform login
+        login(driver, email, password)
 
         # Load the SQL query
         sql_query = load_sql_query(sql_file)
@@ -65,10 +83,7 @@ def process_query(sql_file, download_dir):
         actions = ActionChains(driver)
         actions.move_to_element(visualize_button).click().perform()
         print("Clicked the 'Visualize' button.")
-        time.sleep(3)  # Wait for the visualization and pop-up
-
-        # Handle the close area
-        handle_close_area(driver)
+        time.sleep(3)  # Wait for the visualization to complete
 
         # Locate the diagram and perform a right-click
         diagram_area = driver.find_element(By.CSS_SELECTOR, 'div.Canvas__k2Y31 .scale')
@@ -97,10 +112,10 @@ def process_query(sql_file, download_dir):
         print("Session ended.")
 
 # Main function
-def automate_sqlflow_for_multiple_files(sql_files, download_dir):
+def automate_sqlflow_for_multiple_files(sql_files, download_dir, email, password):
     for sql_file in sql_files:
         print(f"Processing file: {sql_file}")
-        process_query(sql_file, download_dir)
+        process_query(sql_file, download_dir, email, password)
 
 # Directory containing the SQL files
 sql_files_dir = "files"  # Path to your directory containing SQL files
@@ -110,5 +125,9 @@ sql_files = [os.path.join(sql_files_dir, file) for file in os.listdir(sql_files_
 download_directory = os.path.join(os.getcwd(), "downloads")
 os.makedirs(download_directory, exist_ok=True)
 
+# User credentials
+user_email = "your_email@example.com"  # Replace with your email
+user_password = "your_password"        # Replace with your password
+
 # Automate for all SQL files
-automate_sqlflow_for_multiple_files(sql_files, download_directory)
+automate_sqlflow_for_multiple_files(sql_files, download_directory, user_email, user_password)
