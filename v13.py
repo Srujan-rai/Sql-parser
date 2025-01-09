@@ -234,6 +234,8 @@ def main():
     
     if not os.path.exists(destination_path):
         os.makedirs(destination_path)
+        
+        
     mysql_keywords =  [
     "AUTO_INCREMENT", "ENUM", "SET", "TINYINT", "MEDIUMINT", "SMALLINT", "BIGINT", 
     "YEAR", "TEXT", "TINYTEXT", "MEDIUMTEXT", "LONGTEXT", "BLOB", "MEDIUM_BLOB", 
