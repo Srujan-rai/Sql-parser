@@ -46,12 +46,12 @@ def process_query(driver, sql_query, actions):
     try:
         set_codemirror_content(driver, sql_query)
         print("SQL query pasted into the CodeMirror editor.")
-        time.sleep(2)
+        time.sleep(4)
 
         visualize_button = driver.find_element(By.XPATH, '//button[contains(@class, "ant-btn-primary") and .//span[text()="visualize"]]')
         actions.move_to_element(visualize_button).click().perform()
         print("Clicked the 'Visualize' button.")
-        time.sleep(3)  
+        time.sleep(15)  
 
         diagram_area = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'div.Canvas__k2Y31 .scale'))
@@ -92,19 +92,18 @@ def automate_sqlflow_for_multiple_files(sql_files, download_dir):
     try:
         driver.get("https://sqlflow.gudusoft.com/#/")
         print("Opened SQLFlow website.")
-        time.sleep(5)
+        time.sleep(12)
 
         visualize_button = driver.find_element(By.XPATH, '//button[contains(@class, "ant-btn-primary") and .//span[text()="visualize"]]')
         actions.move_to_element(visualize_button).click().perform()
         print("Clicked the 'Visualize' button to trigger login popup.")
         time.sleep(3)
 
-        # Handle login popup
         email = "srujan.ci21@sahyadri.edu.in"
         password = "srujan@2003"  
         handle_login(driver, email, password)
-        time.sleep(10) 
-
+        time.sleep(20) #componsating for slow internet connection
+        
         for sql_file in sql_files:
             print(f"Processing file: {sql_file}")
             sql_query = load_sql_query(sql_file)

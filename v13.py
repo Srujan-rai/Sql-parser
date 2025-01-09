@@ -1,8 +1,17 @@
+#SQL SUMMARY AND VISUALIZATION CODE
 import os
 import sqlparse
 import pandas as pd
 import re
 import argparse
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+import os
+
 
 MAX_VALUES = {
     "subqueries": 10,
@@ -21,6 +30,76 @@ WEIGHTS = {
     "cte_complexity": 10,
     "case_complexity": 10,
 }
+
+def load_sql_query(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
+
+def set_codemirror_content(driver, query):
+    script = """
+    var editor = document.querySelector('.CodeMirror').CodeMirror;
+    editor.setValue(arguments[0]);
+    """
+    driver.execute_script(script, query)
+
+def handle_login(driver, email, password):
+    try:
+        email_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "email"))
+        )
+        email_input.clear()
+        email_input.send_keys(email)
+        print("Email entered successfully.")
+
+        password_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "password"))
+        )
+        password_input.clear()
+        password_input.send_keys(password)
+        print("Password entered successfully.")
+
+        login_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//button[contains(@class, "ant-btn-primary") and .//span[text()="login"]]'))
+        )
+        login_button.click()
+        print("Login button clicked successfully.")
+        time.sleep(2)
+    except Exception as e:
+        print(f"Error during login process: {e}")
+
+def process_query(driver, sql_query, actions):
+    try:
+        set_codemirror_content(driver, sql_query)
+        print("SQL query pasted into the CodeMirror editor.")
+        time.sleep(4)
+
+        visualize_button = driver.find_element(By.XPATH, '//button[contains(@class, "ant-btn-primary") and .//span[text()="visualize"]]')
+        actions.move_to_element(visualize_button).click().perform()
+        print("Clicked the 'Visualize' button.")
+        time.sleep(15)  
+
+        diagram_area = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'div.Canvas__k2Y31 .scale'))
+        )
+        actions.context_click(diagram_area).perform()  
+        print("Right-clicked on the diagram.")
+        time.sleep(1)  
+
+        actions.move_by_offset(50, 10).perform()  
+        time.sleep(0.5)
+
+       
+        for _ in range(6):  
+            actions.move_by_offset(0, 30).perform()  
+            time.sleep(0.2)  
+
+        actions.click().perform()
+        print("Diagram downloaded.")
+        time.sleep(5)  
+    except Exception as e:
+        print(f"Error processing query: {e}")
+
+
 
 def remove_comments(sql_text):
     """Removes SQL comments."""
@@ -141,7 +220,8 @@ def parse_arguments():
                         help="Destination directory for outputs.")
     parser.add_argument('-type', '--type', help="Specify the type used (e.g., mysql, postgresql, oracle)", required=True)
     
-    parser.add_argument('-diagram', '--diagram', action='store_true',help="Generate diagrams for the SQL queries.")
+    parser.add_argument('-graph', '--graphs', action='store_true', help='Generate graphs')
+    
     return parser.parse_args()
 
 def main():
@@ -149,7 +229,9 @@ def main():
     input_files = args.source
     destination_path = args.destination
     db_type = args.type.lower()
-
+    diagram = args.graphs
+    
+    
     if not os.path.exists(destination_path):
         os.makedirs(destination_path)
     mysql_keywords =  [
@@ -239,10 +321,51 @@ def main():
         results.append(result)
 
         print(f"Analysis complete for '{input_file}' with Complexity Score: {complexity_score}")
-        
-        
-
+    
     generate_excel_summary(results, os.path.join(destination_path, "sql_summary.xlsx"))
+    
+    download_directory = os.path.join(os.getcwd(), "downloads")
+    os.makedirs(download_directory, exist_ok=True)
+    
+    if diagram:
+        chrome_options = webdriver.ChromeOptions()
+        
+        prefs = {
+            "download.default_directory": download_directory,
+            "download.prompt_for_download": False,
+            "safebrowsing.enabled": True,
+        }
+        chrome_options.add_experimental_option("prefs", prefs)
+        driver = webdriver.Chrome(options=chrome_options)
+        driver.maximize_window()
+        
+        actions = ActionChains(driver)
+
+        try:
+            driver.get("https://sqlflow.gudusoft.com/#/")
+            print("Opened SQLFlow website.")
+            time.sleep(12)
+
+            visualize_button = driver.find_element(By.XPATH, '//button[contains(@class, "ant-btn-primary") and .//span[text()="visualize"]]')
+            actions.move_to_element(visualize_button).click().perform()
+            print("Clicked the 'Visualize' button to trigger login popup.")
+            time.sleep(3)
+
+            email = "srujan.ci21@sahyadri.edu.in"
+            password = "srujan@2003"  
+            handle_login(driver, email, password)
+            time.sleep(20) #componsating for slow internet connection
+            
+            for input_file in input_files:
+                print(f"Processing file: {input_file}")
+                sql_query = load_sql_query(input_file)
+                process_query(driver, sql_query, actions)
+
+        finally:
+            driver.quit()
+            print("Session ended.")
+                 
+
     print("Task complete! All files analyzed.")
 
 if __name__ == "__main__":
