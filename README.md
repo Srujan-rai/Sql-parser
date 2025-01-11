@@ -98,5 +98,5 @@ Special thanks to the contributors and open-source libraries used in this projec
 - `pandas`
 - `selenium`
 - `argparse`
-```
+
 
