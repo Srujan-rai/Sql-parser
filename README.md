@@ -1,6 +1,4 @@
-Here’s the entire content for your `README.md` file:
 
-```markdown
 # SQL Query Summary and Visualization Tool
 
 This tool provides a comprehensive solution for analyzing, summarizing, and visualizing SQL queries. It calculates query complexity, formats SQL code, generates summaries, and creates query diagrams using Selenium.
@@ -43,8 +41,6 @@ This tool provides a comprehensive solution for analyzing, summarizing, and visu
    ```bash
    pip install sqlparse pandas selenium argparse
    ```
-
----
 
 ## Usage
 
