@@ -100,4 +100,3 @@ Special thanks to the contributors and open-source libraries used in this projec
 - `argparse`
 ```
 
-Copy this content directly into your `README.md` file. Replace `<repository-url>` with your actual repository URL.
