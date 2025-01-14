@@ -1,103 +1,102 @@
 
-
 # SQL Query Summary and Visualization Tool  
 
+SQL queries often grow complex as they scale, making them challenging to read, optimize, and debug. Developers and analysts frequently encounter issues such as:  
+- Poorly formatted or undocumented queries that hinder collaboration.  
+- Difficulty understanding query structures and components, such as joins, subqueries, or Common Table Expressions (CTEs).  
+- Lack of visualization tools to optimize query flow and identify bottlenecks.  
+- Absence of automated systems to generate meaningful summaries and assess complexity across multiple queries.  
 
-SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
-- Poorly formatted or undocumented SQL queries that hinder collaboration.  
-- Difficulty in understanding query structure and components like joins, subqueries, or CTEs.  
-- Lack of tools to visualize query flow, making it hard to optimize queries or identify bottlenecks.  
-- The absence of an automated system to generate meaningful summaries and assess query complexity across multiple queries.  
+---
 
-## What We Are Solving  
+## **Problem Statement**  
 
 This tool addresses the following key challenges:  
-1. **Enhancing Query Readability**: By automating SQL formatting, it ensures that queries are more readable and maintainable.  
-2. **Providing Deep Insights**: Analyzing queries to extract useful metrics like the number of joins, subqueries, or nesting levels helps in evaluating query complexity.  
-3. **Visualization**: Creating diagrams to represent the flow of queries visually aids understanding and optimization.  
-4. **Automated Reporting**: Generating Excel-based summaries for multiple queries saves time and aids in documentation and decision-making.  
+1. **Improved Readability**: Automates SQL formatting to enhance maintainability.  
+2. **Comprehensive Insights**: Extracts critical metrics like joins, subqueries, and nesting levels to evaluate query complexity.  
+3. **Enhanced Visualization**: Generates diagrams for clear representation of query flow.  
+4. **Automated Reporting**: Creates Excel-based summaries, saving time and aiding documentation.  
 
 ---
 
-## Objectives  
+## **Objectives**  
 
-1. **Improve Query Documentation**: Automatically format and summarize SQL queries to enhance clarity.  
-2. **Assist Query Optimization**: Provide insights into query components and complexity to identify performance bottlenecks.  
-3. **Enable Visual Query Representation**: Generate diagrams that represent query logic and flow.  
-4. **Facilitate Batch Processing**: Allow users to analyze multiple queries simultaneously and save the outputs efficiently.  
+1. **Streamline Documentation**: Automatically format and summarize SQL queries for better clarity.  
+2. **Facilitate Optimization**: Provide insights into query components to identify bottlenecks and optimize performance.  
+3. **Enable Visualization**: Create diagrams representing query logic and flow for improved understanding.  
+4. **Batch Processing**: Analyze multiple queries simultaneously and save outputs efficiently.  
 
 ---
 
-## Features  
+## **Key Features**  
 
-### 1. **SQL Formatting**  
-- Reformats SQL queries to improve readability.  
-- Removes inline and block comments to focus on query logic.  
-- Adheres to consistent coding styles.  
+### 1. **SQL Query Formatting**  
+- Automatically reformats queries for enhanced readability.  
+- Removes inline and block comments to focus on core logic.  
+- Ensures adherence to consistent coding standards.  
 
 ### 2. **Query Analysis**  
-- Counts keywords like `SELECT`, `JOIN`, `WHERE`, etc., to assess complexity.  
-- Identifies components such as:  
-  - **JOIN types** (INNER, LEFT, RIGHT, FULL).  
-  - **Common Table Expressions (CTEs)** and their usage.  
-  - **Subqueries** and their nesting levels.  
-- Assigns a **complexity score** based on identified components.  
+- Detects key SQL components, including:  
+  - **Join Types**: INNER, LEFT, RIGHT, FULL.  
+  - **CTEs** and their usage.  
+  - **Subqueries** with nesting levels.  
+- Calculates a **complexity score** based on the structure and components.  
 
 ### 3. **Visualization**  
-- Automates query diagram creation using Selenium.  
-- Compatible with web-based visualization tools (e.g., dbdiagram.io).  
-- Downloads visual diagrams as image files or PDFs.  
+- Automatically generates query diagrams using Selenium.  
+- Integrates with web-based tools (e.g., dbdiagram.io).  
+- Saves diagrams in image or PDF formats for easy sharing.  
 
-### 4. **Excel Summary Generation**  
-- Summarizes query metrics (e.g., number of joins, tables, complexity score) into an Excel file.  
-- Provides aggregated insights for bulk analysis of SQL queries.  
+### 4. **Excel-Based Summaries**  
+- Compiles query metrics, including join counts, nesting levels, and complexity scores, into structured Excel files.  
+- Enables bulk analysis and comprehensive reporting.  
 
 ---
 
-## Technical Details  
+## **Technical Overview**  
 
 ### **Core Components**  
 
-1. **SQL Parsing and Formatting**:  
-   - Uses the `sqlparse` library to parse and reformat SQL queries.  
-   - Strips comments and ensures consistent query formatting.  
+1. **SQL Parsing and Formatting**  
+   - Utilizes the `sqlparse` library for parsing and reformatting SQL queries.  
+   - Strips comments and enforces consistent formatting.  
 
-2. **Keyword and Component Analysis**:  
-   - Regular expressions and string parsing to detect SQL keywords, joins, subqueries, and nesting.  
+2. **Component Analysis**  
+   - Detects SQL keywords, joins, subqueries, and other elements using string parsing and regular expressions.  
 
-3. **Complexity Scoring**:  
-   - Assigns scores based on factors like the number of tables joined, subquery levels, and query length.  
+3. **Complexity Scoring**  
+   - Assigns scores based on factors such as table joins, query length, and subquery levels.  
 
-4. **Visualization Automation**:  
-   - Uses Selenium to interact with web-based tools for creating query diagrams.  
-   - Supports headless browser execution for automation in CI/CD pipelines.  
+4. **Visualization Automation**  
+   - Uses Selenium to interact with web-based visualization tools.  
+   - Supports headless browser execution for seamless automation in CI/CD pipelines.  
 
-5. **Excel File Creation**:  
-   - Uses `pandas` to organize query metrics into structured data.  
-   - Exports the data to an Excel file for easy sharing and reporting.  
+5. **Excel File Generation**  
+   - Leverages `pandas` to organize query metrics into structured data.  
+   - Exports detailed reports in Excel format.  
 
 ---
 
-## Installation  
+## **Installation**  
 
-### Prerequisites  
-- **Python 3.10 or later**.  
+### **Prerequisites**  
+- **Python 3.10 or later**  
 - Compatible browser driver (e.g., ChromeDriver for Google Chrome).  
 
-### Installation Steps  
+### **Installation Steps**  
 1. Clone the repository:  
    ```bash  
    git clone https://github.com/Srujan-rai/Sql-parser  
    cd Sql-parser  
    ```  
-2. Install required libraries:  
+2. Install the required libraries:  
    ```bash  
    pip install sqlparse pandas selenium argparse  
    ```  
 
 ---
 
-## Usage  
+## **Usage**  
 
 ### **Command-Line Arguments**  
 
@@ -108,62 +107,62 @@ This tool addresses the following key challenges:
 | `-type, --type`      | Specify the database type (`mysql`, `postgresql`, `oracle`). **(Required)**                     |  
 | `-graph, --graphs`   | Enable query diagram generation. Requires a compatible browser and driver.                      |  
 
-### Example Usage  
+### **Example Commands**  
 
-1. **Basic Analysis**:  
+1. **Basic Query Analysis**:  
    ```bash  
    python main.py --source queries.sql --type mysql  
    ```  
 
-2. **Analyze Multiple Files**:  
+2. **Multiple File Analysis**:  
    ```bash  
    python main.py --source query1.sql query2.sql --destination ./output --type postgresql  
    ```  
 
-3. **Generate Query Diagrams**:  
+3. **Query Diagram Generation**:  
    ```bash  
    python main.py --source queries.sql --type mysql --graphs  
    ```  
 
 ---
 
-## Outputs  
+## **Outputs**  
 
-1. **Formatted SQL**: A new file with the reformatted query.  
+1. **Formatted SQL Queries**: Enhanced readability and structure.  
 2. **Analysis Summary**:  
-   - Excel file summarizing metrics like join types, nesting levels, and complexity scores.  
-3. **Query Diagrams**: Visual representations of query flow, saved as images or PDFs.  
+   - Excel files detailing metrics such as join counts, nesting levels, and complexity scores.  
+3. **Visual Diagrams**: Professionally styled representations of query flow in image or PDF formats.  
 
 ---
 
-## Roadmap  
+## **Roadmap**  
 
-1. **Database Integration**: Allow direct analysis of queries fetched from live databases.  
-2. **Advanced Complexity Metrics**: Incorporate execution cost and database-specific optimization metrics.  
-3. **Interactive Visualizations**: Enable dynamic exploration of query diagrams.  
-4. **Query Optimization Suggestions**: Provide actionable insights for improving query performance.  
+1. **Live Database Integration**: Analyze queries directly from active databases.  
+2. **Advanced Metrics**: Incorporate execution cost and database-specific optimization metrics.  
+3. **Interactive Visualizations**: Introduce dynamic query diagrams for easier exploration.  
+4. **Optimization Recommendations**: Provide actionable suggestions to improve query performance.  
 
 ---
 
-## Contributing  
+## **Contributing**  
 
 1. Fork this repository.  
-2. Create a new branch (`feature/your-feature`).  
-3. Commit changes and open a pull request.  
+2. Create a feature branch (`feature/your-feature`).  
+3. Commit your changes and open a pull request.  
 
 ---
 
-## License  
+## **License**  
 
 This project is licensed under the [MIT License](LICENSE).  
 
----  
+---
 
-## Acknowledgments  
+## **Acknowledgments**  
 
+Special thanks to the creators and maintainers of:  
 - `sqlparse`  
 - `pandas`  
 - `selenium`  
 - `argparse`  
-
 
