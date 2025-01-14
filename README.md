@@ -1,6 +1,7 @@
+
 # SQL Query Summary and Visualization Tool  
 
-![Tool Overview Image](path/to/your-image.jpg)  
+ 
 
 SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
 - Poorly formatted or undocumented SQL queries that hinder collaboration.  
@@ -35,7 +36,7 @@ This tool addresses the following key challenges:
 - Adheres to consistent coding styles.  
 
 ### 2. **Query Analysis**  
-- Counts keywords like SELECT, JOIN, WHERE, etc., to assess complexity.  
+- Counts keywords like `SELECT`, `JOIN`, `WHERE`, etc., to assess complexity.  
 - Identifies components such as:  
   - **JOIN types** (INNER, LEFT, RIGHT, FULL).  
   - **Common Table Expressions (CTEs)** and their usage.  
@@ -58,7 +59,7 @@ This tool addresses the following key challenges:
 ### **Core Components**  
 
 1. **SQL Parsing and Formatting**:  
-   - Uses the sqlparse library to parse and reformat SQL queries.  
+   - Uses the `sqlparse` library to parse and reformat SQL queries.  
    - Strips comments and ensures consistent query formatting.  
 
 2. **Keyword and Component Analysis**:  
@@ -72,7 +73,7 @@ This tool addresses the following key challenges:
    - Supports headless browser execution for automation in CI/CD pipelines.  
 
 5. **Excel File Creation**:  
-   - Uses pandas to organize query metrics into structured data.  
+   - Uses `pandas` to organize query metrics into structured data.  
    - Exports the data to an Excel file for easy sharing and reporting.  
 
 ---
@@ -85,16 +86,14 @@ This tool addresses the following key challenges:
 
 ### Installation Steps  
 1. Clone the repository:  
-   
-bash  
+   ```bash  
    git clone https://github.com/Srujan-rai/Sql-parser  
-   cd Sql-parser
-  
+   cd Sql-parser  
+   ```  
 2. Install required libraries:  
-   
-bash  
-   pip install sqlparse pandas selenium argparse
-  
+   ```bash  
+   pip install sqlparse pandas selenium argparse  
+   ```  
 
 ---
 
@@ -104,30 +103,27 @@ bash
 
 | Argument             | Description                                                                                     |  
 |----------------------|-------------------------------------------------------------------------------------------------|  
-| -s, --source       | Path(s) to the source SQL file(s). Accepts multiple files. **(Required)**                       |  
-| -d, --destination  | Destination directory for output files. Defaults to the current directory.                      |  
-| -type, --type      | Specify the database type (mysql, postgresql, oracle). **(Required)**                     |  
-| -graph, --graphs   | Enable query diagram generation. Requires a compatible browser and driver.                      |  
+| `-s, --source`       | Path(s) to the source SQL file(s). Accepts multiple files. **(Required)**                       |  
+| `-d, --destination`  | Destination directory for output files. Defaults to the current directory.                      |  
+| `-type, --type`      | Specify the database type (`mysql`, `postgresql`, `oracle`). **(Required)**                     |  
+| `-graph, --graphs`   | Enable query diagram generation. Requires a compatible browser and driver.                      |  
 
 ### Example Usage  
 
 1. **Basic Analysis**:  
-   
-bash  
-   python main.py --source queries.sql --type mysql
-  
+   ```bash  
+   python main.py --source queries.sql --type mysql  
+   ```  
 
 2. **Analyze Multiple Files**:  
-   
-bash  
-   python main.py --source query1.sql query2.sql --destination ./output --type postgresql
-  
+   ```bash  
+   python main.py --source query1.sql query2.sql --destination ./output --type postgresql  
+   ```  
 
 3. **Generate Query Diagrams**:  
-   
-bash  
-   python main.py --source queries.sql --type mysql --graphs
-  
+   ```bash  
+   python main.py --source queries.sql --type mysql --graphs  
+   ```  
 
 ---
 
@@ -152,7 +148,7 @@ bash
 ## Contributing  
 
 1. Fork this repository.  
-2. Create a new branch (feature/your-feature).  
+2. Create a new branch (`feature/your-feature`).  
 3. Commit changes and open a pull request.  
 
 ---
@@ -165,7 +161,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments  
 
-- sqlparse  
-- pandas  
-- selenium  
-- argparse  
+- `sqlparse`  
+- `pandas`  
+- `selenium`  
+- `argparse`  
