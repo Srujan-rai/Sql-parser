@@ -11,7 +11,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
-
+import random
+import string
 
 MAX_VALUES = {
     "subqueries": 10,
@@ -66,6 +67,40 @@ def handle_login(driver, email, password):
         time.sleep(2)
     except Exception as e:
         print(f"Error during login process: {e}")
+
+
+def handle_signup(driver,email,password):
+    try:
+        
+        sign_up_button = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, "//b[contains(text(),'Sign up')]")))
+        
+        
+        sign_up_button.click()
+        email_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "email"))
+        )
+        email_input.clear()
+        email_input.send_keys(email)
+        print("Email entered successfully.")
+
+        password_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "password"))
+        )
+        password_input.clear()
+        password_input.send_keys(password)
+        print("Password entered successfully.")
+
+        login_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//button[contains(@class, "ant-btn-primary") and .//span[text()="sign up"]]'))
+        )
+        login_button.click()
+        print("sign up button clicked successfully.")
+        time.sleep(2)
+        
+    except Exception as e:
+        print(f"Error during th signup process: {e} ")
+    
 
 def process_query(driver, sql_query, actions):
     try:
@@ -156,10 +191,16 @@ def count_ctes(formatted_sql):
     """Counts the number of CTEs in the SQL."""
     return len(re.findall(r'\bWITH\b\s+\w+\s+AS\s*\(', formatted_sql, re.IGNORECASE))
 
+def generate_random_email():
+    random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+    return f"{random_string}@gmail.com"
+
+def generate_random_password():
+    random_string=''.join(random.choices(string.ascii_letters+string.digits+string.punctuation,k=12))
+    return random_string
+
 def count_subqueries_and_depth(sql_text):
-    """
-    Counts subqueries and determines the maximum nesting depth of subqueries.
-    """
+
     subquery_pattern = r"""
         \(                             
         \s*SELECT\s+                   # SELECT keyword
@@ -353,9 +394,11 @@ def main():
             print("Clicked the 'Visualize' button to trigger login popup.")
             time.sleep(3)
 
-            email = "srujan@gmail.com"
-            password = "raisrujan@2222"  
-            handle_login(driver, email, password)
+            email = generate_random_email()
+            password = generate_random_password()
+            
+            handle_signup(driver, email, password)
+            #handle_login(driver, email, password)
             time.sleep(20) #componsating for slow internet connection
             
             for input_file in input_files:

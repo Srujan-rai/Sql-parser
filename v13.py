@@ -195,6 +195,10 @@ def generate_random_email():
     random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
     return f"{random_string}@gmail.com"
 
+def generate_random_password():
+    random_string=''.join(random.choices(string.ascii_letters+string.digits+string.punctuation,k=10))
+    return random_string
+
 def count_subqueries_and_depth(sql_text):
     """
     Counts subqueries and determines the maximum nesting depth of subqueries.
@@ -393,10 +397,10 @@ def main():
             time.sleep(3)
 
             email = generate_random_email()
-            password = "password@2222"
+            password = generate_random_password()
             
             handle_signup(driver, email, password)
-            #handle_login(driver, email, password)
+            #handle_login(driver, email, password) #removed login because of rate limit
             time.sleep(20) #componsating for slow internet connection
             
             for input_file in input_files:
