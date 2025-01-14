@@ -78,8 +78,15 @@ This tool addresses the following key challenges:
    - Exports the data to an Excel file for easy sharing and reporting.  
 
 ---
- ![Tool Overview Image](images/image.png)  
- ![Tool Overview Image](images/image_2.png) 
+![Tool Overview Image](images/image.png)  
+*Figure 1: Tool Overview – This image provides a snapshot of the CLI interaction with the tool.*
+
+![Tool Overview Image](images/image_2.png)  
+*Figure 2: Query Summarization Output – This image displays the summarized output of the SQL queries.*
+
+![Tool Overview Image](images/image_3.png)  
+*Figure 3: Query Analysis Visualization – This image highlights the visual representation of SQL query flow, enabling better understanding and optimization.*
+
 ---
 ## Installation  
 
