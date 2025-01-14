@@ -1,7 +1,8 @@
 
 # SQL Query Summary and Visualization Tool  
 
- 
+ ![Tool Overview Image](https://drive.google.com/file/d/1MrCL-T47XCYxVd7uWYYNUje-CNbeLDd-/view?usp=sharing)  
+
 
 SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
 - Poorly formatted or undocumented SQL queries that hinder collaboration.  
