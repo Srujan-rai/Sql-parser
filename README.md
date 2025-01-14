@@ -1,11 +1,20 @@
 
 # SQL Query Summary and Visualization Tool  
 
-
+<table>
+<tr>
+<td>
+<img src="web/src/assets/logo.png" alt="Your Logo" width="200%" height="200%">
+</td>
+<td>
+<b><i>The SQL Query Summary and Visualization Tool is a powerful application designed to enhance the readability, analysis, and optimization of SQL queries. It formats and summarizes queries, provides insights into their complexity, and generates visual diagrams to represent query flow, helping developers and analysts streamline their workflow and improve collaboration.</b>
+</td>
+</tr>
+</table>
 
 
 SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
-- :sad: Poorly formatted or undocumented SQL queries that hinder collaboration.  
+- Poorly formatted or undocumented SQL queries that hinder collaboration.  
 - Difficulty in understanding query structure and components like joins, subqueries, or CTEs.  
 - Lack of tools to visualize query flow, making it hard to optimize queries or identify bottlenecks.  
 - The absence of an automated system to generate meaningful summaries and assess query complexity across multiple queries.  
