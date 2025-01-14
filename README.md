@@ -1,8 +1,7 @@
 
 # SQL Query Summary and Visualization Tool  
 
- ![Tool Overview Image](images/image.png)  
- ![Tool Overview Image](images/image_2.png) 
+
 
 
 SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
@@ -79,7 +78,9 @@ This tool addresses the following key challenges:
    - Exports the data to an Excel file for easy sharing and reporting.  
 
 ---
-
+ ![Tool Overview Image](images/image.png)  
+ ![Tool Overview Image](images/image_2.png) 
+---
 ## Installation  
 
 ### Prerequisites  
