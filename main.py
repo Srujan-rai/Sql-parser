@@ -353,8 +353,8 @@ def main():
             print("Clicked the 'Visualize' button to trigger login popup.")
             time.sleep(3)
 
-            email = "srujan.ci21@sahyadri.edu.in"
-            password = "srujan@2003"  
+            email = "srujan@gmail.com"
+            password = "raisrujan@2222"  
             handle_login(driver, email, password)
             time.sleep(20) #componsating for slow internet connection
             
