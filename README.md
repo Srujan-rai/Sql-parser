@@ -4,7 +4,7 @@
 <table>
 <tr>
 <td>
-<img src="images/logo.png" alt="Your Logo" width="150%" height="150%">
+<img src="images/logo.png" alt="Your Logo" width="250%" height="250%">
 </td>
 <td>
 <b><i>The SQL Query Summary and Visualization Tool is a powerful application designed to enhance the readability, analysis, and optimization of SQL queries. It formats and summarizes queries, provides insights into their complexity, and generates visual diagrams to represent query flow, helping developers and analysts streamline their workflow and improve collaboration.</b>
