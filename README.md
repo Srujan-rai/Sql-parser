@@ -1,7 +1,7 @@
 # SQL Query Summary and Visualization Tool  
 
 ![Tool Overview Image](path/to/your-image.jpg)  
-[Video Demo of the Tool](https://drive.google.com/file/d/1F65qVYpOqkl3-hhHYw0iLRGd7sdyEFAZ/view?usp=sharing)
+<iframe width="560" height="315" src="https://youtu.be/7zZRi566erY" frameborder="0" allowfullscreen></iframe>
 
 
 SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
