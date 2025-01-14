@@ -5,7 +5,7 @@
 
 
 SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
-- Poorly formatted or undocumented SQL queries that hinder collaboration.  
+- :sad: Poorly formatted or undocumented SQL queries that hinder collaboration.  
 - Difficulty in understanding query structure and components like joins, subqueries, or CTEs.  
 - Lack of tools to visualize query flow, making it hard to optimize queries or identify bottlenecks.  
 - The absence of an automated system to generate meaningful summaries and assess query complexity across multiple queries.  
