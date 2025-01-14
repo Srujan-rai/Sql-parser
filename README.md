@@ -136,7 +136,8 @@ This tool addresses the following key challenges:
 3. **Query Diagrams**: Visual representations of query flow, saved as images or PDFs.  
 
 ---
-
+[Watch the Demo Video](https://youtu.be/7zZRi566erY)
+---
 ## Roadmap  
 
 1. **Database Integration**: Allow direct analysis of queries fetched from live databases.  
