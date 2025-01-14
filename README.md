@@ -38,8 +38,11 @@ This tool addresses the following key challenges:
 
 ---
 ## Limitation
+
 This tool leverages SQLFlow for SQL query visualization through Selenium WebDriver, which has limitations based on the service's plan and features. To address this constraint, upgrading the plan to access advanced capabilities and ensure seamless integration would be a viable solution.
+
 ---
+
 ## Features  
 
 ### 1. **SQL Formatting**  
