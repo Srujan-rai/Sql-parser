@@ -1,102 +1,169 @@
 
-# SQL Query Summary and Visualization Tool
 
-This tool provides a comprehensive solution for analyzing, summarizing, and visualizing SQL queries. It calculates query complexity, formats SQL code, generates summaries, and creates query diagrams using Selenium.
+# SQL Query Summary and Visualization Tool  
 
----
 
-## Features
+SQL queries often become complex as they grow in size and functionality, leading to challenges in readability, performance optimization, and debugging. Developers and analysts frequently encounter issues such as:  
+- Poorly formatted or undocumented SQL queries that hinder collaboration.  
+- Difficulty in understanding query structure and components like joins, subqueries, or CTEs.  
+- Lack of tools to visualize query flow, making it hard to optimize queries or identify bottlenecks.  
+- The absence of an automated system to generate meaningful summaries and assess query complexity across multiple queries.  
 
-1. **SQL Formatting**
-   - Formats SQL queries for better readability.
-   - Removes inline and block comments from SQL code.
+## What We Are Solving  
 
-2. **Query Analysis**
-   - Counts occurrences of specific keywords (e.g., `SELECT`, `JOIN`, etc.).
-   - Identifies query components like JOIN types, CTEs, subqueries, and nesting levels.
-   - Generates a complexity score for SQL queries.
-
-3. **Visualization**
-   - Automates query diagram generation using Selenium and a web-based visualization tool.
-   - Downloads the query diagrams directly to your system.
-
-4. **Excel Summary Generation**
-   - Creates an Excel file summarizing query analysis metrics for all input files.
+This tool addresses the following key challenges:  
+1. **Enhancing Query Readability**: By automating SQL formatting, it ensures that queries are more readable and maintainable.  
+2. **Providing Deep Insights**: Analyzing queries to extract useful metrics like the number of joins, subqueries, or nesting levels helps in evaluating query complexity.  
+3. **Visualization**: Creating diagrams to represent the flow of queries visually aids understanding and optimization.  
+4. **Automated Reporting**: Generating Excel-based summaries for multiple queries saves time and aids in documentation and decision-making.  
 
 ---
 
-## Installation
+## Objectives  
 
-### Prerequisites
-- **Python 3.10 or later**  
+1. **Improve Query Documentation**: Automatically format and summarize SQL queries to enhance clarity.  
+2. **Assist Query Optimization**: Provide insights into query components and complexity to identify performance bottlenecks.  
+3. **Enable Visual Query Representation**: Generate diagrams that represent query logic and flow.  
+4. **Facilitate Batch Processing**: Allow users to analyze multiple queries simultaneously and save the outputs efficiently.  
+
+---
+
+## Features  
+
+### 1. **SQL Formatting**  
+- Reformats SQL queries to improve readability.  
+- Removes inline and block comments to focus on query logic.  
+- Adheres to consistent coding styles.  
+
+### 2. **Query Analysis**  
+- Counts keywords like `SELECT`, `JOIN`, `WHERE`, etc., to assess complexity.  
+- Identifies components such as:  
+  - **JOIN types** (INNER, LEFT, RIGHT, FULL).  
+  - **Common Table Expressions (CTEs)** and their usage.  
+  - **Subqueries** and their nesting levels.  
+- Assigns a **complexity score** based on identified components.  
+
+### 3. **Visualization**  
+- Automates query diagram creation using Selenium.  
+- Compatible with web-based visualization tools (e.g., dbdiagram.io).  
+- Downloads visual diagrams as image files or PDFs.  
+
+### 4. **Excel Summary Generation**  
+- Summarizes query metrics (e.g., number of joins, tables, complexity score) into an Excel file.  
+- Provides aggregated insights for bulk analysis of SQL queries.  
+
+---
+
+## Technical Details  
+
+### **Core Components**  
+
+1. **SQL Parsing and Formatting**:  
+   - Uses the `sqlparse` library to parse and reformat SQL queries.  
+   - Strips comments and ensures consistent query formatting.  
+
+2. **Keyword and Component Analysis**:  
+   - Regular expressions and string parsing to detect SQL keywords, joins, subqueries, and nesting.  
+
+3. **Complexity Scoring**:  
+   - Assigns scores based on factors like the number of tables joined, subquery levels, and query length.  
+
+4. **Visualization Automation**:  
+   - Uses Selenium to interact with web-based tools for creating query diagrams.  
+   - Supports headless browser execution for automation in CI/CD pipelines.  
+
+5. **Excel File Creation**:  
+   - Uses `pandas` to organize query metrics into structured data.  
+   - Exports the data to an Excel file for easy sharing and reporting.  
+
+---
+
+## Installation  
+
+### Prerequisites  
+- **Python 3.10 or later**.  
 - Compatible browser driver (e.g., ChromeDriver for Google Chrome).  
 
-### Installation Steps
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Srujan-rai/Sql-parser
-   cd Sql-parser
-   ```
-2. Install the required libraries:
-   ```bash
-   pip install sqlparse pandas selenium argparse
-   ```
-
-## Usage
-
-### Command-Line Arguments
-
-| Argument           | Description                                                                                     |
-|--------------------|-------------------------------------------------------------------------------------------------|
-| `-s, --source`     | Path(s) to the source SQL file(s). Accepts multiple files. **(Required)**                       |
-| `-d, --destination`| Destination directory for output files. Defaults to the current directory.                      |
-| `-type, --type`    | Specify the database type (`mysql`, `postgresql`, `oracle`). **(Required)**                     |
-| `-graph, --graphs` | Enable query diagram generation. Requires a compatible browser and driver.                      |
-
-### Example Usage
-1. Basic usage for query analysis:
-   ```bash
-   python main.py --source queries.sql --type mysql
-   ```
-
-2. Analyze multiple files and save the output to a specific directory:
-   ```bash
-   python main.py --source query1.sql query2.sql --destination ./output --type postgresql
-   ```
-
-3. Generate query diagrams along with analysis:
-   ```bash
-   python main.py --source queries.sql --type mysql --graphs
-   ```
+### Installation Steps  
+1. Clone the repository:  
+   ```bash  
+   git clone https://github.com/Srujan-rai/Sql-parser  
+   cd Sql-parser  
+   ```  
+2. Install required libraries:  
+   ```bash  
+   pip install sqlparse pandas selenium argparse  
+   ```  
 
 ---
 
-## Output
-- **Formatted SQL**: A new file with the formatted query.
-- **Analysis Summary**: An Excel file with query metrics.
-- **Query Diagrams**: Visual representation of queries (optional, when `--graphs` is used).
+## Usage  
+
+### **Command-Line Arguments**  
+
+| Argument             | Description                                                                                     |  
+|----------------------|-------------------------------------------------------------------------------------------------|  
+| `-s, --source`       | Path(s) to the source SQL file(s). Accepts multiple files. **(Required)**                       |  
+| `-d, --destination`  | Destination directory for output files. Defaults to the current directory.                      |  
+| `-type, --type`      | Specify the database type (`mysql`, `postgresql`, `oracle`). **(Required)**                     |  
+| `-graph, --graphs`   | Enable query diagram generation. Requires a compatible browser and driver.                      |  
+
+### Example Usage  
+
+1. **Basic Analysis**:  
+   ```bash  
+   python main.py --source queries.sql --type mysql  
+   ```  
+
+2. **Analyze Multiple Files**:  
+   ```bash  
+   python main.py --source query1.sql query2.sql --destination ./output --type postgresql  
+   ```  
+
+3. **Generate Query Diagrams**:  
+   ```bash  
+   python main.py --source queries.sql --type mysql --graphs  
+   ```  
 
 ---
 
-## Contributing
-Contributions are welcome! Please follow these steps:
-1. Fork this repository.
-2. Create a new branch (`feature/your-feature`).
-3. Commit your changes.
-4. Push to your branch and open a pull request.
+## Outputs  
+
+1. **Formatted SQL**: A new file with the reformatted query.  
+2. **Analysis Summary**:  
+   - Excel file summarizing metrics like join types, nesting levels, and complexity scores.  
+3. **Query Diagrams**: Visual representations of query flow, saved as images or PDFs.  
 
 ---
 
-## License
-This project is licensed under the [MIT License](LICENSE).
+## Roadmap  
+
+1. **Database Integration**: Allow direct analysis of queries fetched from live databases.  
+2. **Advanced Complexity Metrics**: Incorporate execution cost and database-specific optimization metrics.  
+3. **Interactive Visualizations**: Enable dynamic exploration of query diagrams.  
+4. **Query Optimization Suggestions**: Provide actionable insights for improving query performance.  
 
 ---
 
-## Acknowledgments
-Special thanks to the contributors and open-source libraries used in this project:
-- `sqlparse`
-- `pandas`
-- `selenium`
-- `argparse`
+## Contributing  
+
+1. Fork this repository.  
+2. Create a new branch (`feature/your-feature`).  
+3. Commit changes and open a pull request.  
+
+---
+
+## License  
+
+This project is licensed under the [MIT License](LICENSE).  
+
+---  
+
+## Acknowledgments  
+
+- `sqlparse`  
+- `pandas`  
+- `selenium`  
+- `argparse`  
 
 
