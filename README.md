@@ -1,5 +1,5 @@
 
-# SQL Query Summary and Visualization Tool  
+# SQL Query Summary and Visualization Tool .
 
 <table>
 <tr>
