@@ -1,6 +1,6 @@
 
 # SQL Query Summary and Visualization Tool
-
+..
 <table>
 <tr>
 <td>
